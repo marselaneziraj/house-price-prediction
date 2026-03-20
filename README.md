@@ -1,0 +1,168 @@
+# House Price Prediction
+
+Machine learning project built on the **Zillow Prize 1** dataset to predict the residual error between Zillow's Zestimate and the actual sale price of a property.
+
+## What this project does
+
+This project predicts **`logerror`**, where:
+
+`logerror = log(Zestimate) - log(SalePrice)`
+
+The goal is not just to estimate a home's price directly, but to learn **where and why the automated valuation model makes mistakes**.
+
+## Dataset
+
+The dataset is not included due to size.
+
+Download it from:
+https://www.kaggle.com/competitions/zillow-prize-1
+
+Place the files inside:
+
+data/raw/
+Put these files into `data/raw/` before running the project:
+
+
+## Detailed project structure
+
+```text
+house-price-prediction/
+├── app/
+│   └── streamlit_app.py
+├── data/
+│   ├── raw/
+│   │   └── PUT_DATASET_FILES_HERE.txt
+│   └── processed/
+├── models/
+├── notebooks/
+│   └── 01_eda_starter.ipynb
+├── src/
+│   ├── __init__.py
+│   ├── config.py
+│   ├── data/
+│   │   ├── __init__.py
+│   │   ├── load_data.py
+│   │   └── make_dataset.py
+│   ├── features/
+│   │   ├── __init__.py
+│   │   ├── feature_engineering.py
+│   │   └── preprocess.py
+│   ├── models/
+│   │   ├── __init__.py
+│   │   ├── evaluate.py
+│   │   ├── metrics.py
+│   │   ├── predict.py
+│   │   ├── train.py
+│   │   └── tune_random_forest.py
+│   └── pipelines/
+│       ├── __init__.py
+│       └── training_pipeline.py
+├── tests/
+│   └── test_project_structure.py
+├── .gitignore
+├── PROJECT_PROMPT.md
+├── README.md
+├── requirements.txt
+├── run_project.bat
+└── run_project.sh
+```
+
+## Recommended workflow
+
+### 1. Create environment
+```bash
+python -m venv .venv
+```
+
+### 2. Activate environment
+
+Windows:
+```bash
+.venv\Scripts\activate
+```
+
+Mac/Linux:
+```bash
+source .venv/bin/activate
+```
+
+### 3. Install dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Build processed dataset
+```bash
+python -m src.data.make_dataset
+```
+
+### 5. Train benchmark models
+```bash
+python -m src.models.train
+```
+
+### 6. Evaluate best model
+```bash
+python -m src.models.evaluate
+```
+
+### 7. Tune Random Forest
+```bash
+python -m src.models.tune_random_forest
+```
+
+### 8. Launch optional Streamlit UI
+```bash
+streamlit run app/streamlit_app.py
+```
+or 
+
+```bash
+pip install -r requirements.txt
+python -m src.data.make_dataset
+python -m src.models.train
+python -m src.models.evaluate
+python -m src.models.tune_random_forest
+python -m streamlit run app/streamlit_app.py
+```
+## Modeling approach
+
+The default pipeline:
+
+- merges 2016 and 2017 train/property files
+- extracts date-based features from `transactiondate`
+- creates simple house features such as property age and tax ratios
+- drops columns with extreme missingness
+- keeps manageable categorical features
+- imputes missing values
+- scales numeric features
+- one-hot encodes selected categorical features
+- compares several regression models
+
+## Models included
+
+- Linear Regression
+- Ridge Regression
+- Lasso Regression
+- Elastic Net
+- Random Forest Regressor
+- Gradient Boosting Regressor
+- AdaBoost Regressor
+- Decision Tree Regressor
+
+## Metrics
+
+- MAE
+- MSE
+- RMSE
+- R²
+
+## Notes
+
+- The dataset is large and messy, so preprocessing is the core part of the project.
+- The target is **`logerror`**, not raw sale price.
+- You can extend this project with XGBoost, SHAP, FastAPI, Docker, and MLflow later.
+
+## Resume bullet
+
+Built an end-to-end machine learning regression pipeline on Zillow housing data to predict Zestimate residual error (`logerror`), including dataset merging, missing-value handling, feature engineering, model benchmarking, hyperparameter tuning, and explainability-ready outputs.
